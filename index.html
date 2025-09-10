@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Lokasi</title>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Library untuk export ke Excel -->
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js](https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js)"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="app" class="container mx-auto p-4 max-w-4xl">
 
+        <!-- Halaman Login -->
+        <div id="login-page" class="bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">Login Sistem Absensi</h1>
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700">Username</label>
+                <input type="text" id="username" class="w-full p-2 border rounded-md">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700">Password</label>
+                <input type="password" id="password" class="w-full p-2 border rounded-md">
+            </div>
+            <button id="login-btn" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Login</button>
+            <p id="login-error" class="text-red-500 text-center mt-4"></p>
+        </div>
+
+        <!-- Dashboard Admin -->
+        <div id="admin-dashboard" class="hidden">
+            <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
+                <div>
+                    <h1 class="text-2xl font-bold">Dashboard Admin</h1>
+                    <p id="admin-welcome"></p>
+                </div>
+                <button id="logout-btn-admin" class="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">Logout</button>
+            </div>
+            
+            <!-- Konten Admin (Tabs) -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8" id="admin-tabs">
+                        <a href="#rekap" class="tab-btn border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Rekap Absensi</a>
+                        <a href="#mahasiswa" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Kelola Mahasiswa</a>
+                        <a href="#jadwal" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Kelola Jadwal</a>
+                    </nav>
+                </div>
+                
+                <div id="rekap-content" class="tab-content mt-6">
+                    <h2 class="text-xl font-semibold mb-4">Rekap Absensi</h2>
+                    <button id="download-excel-btn" class="mb-4 bg-green-500 text-white p-2 rounded-md hover:bg-green-600">Unduh sebagai Excel</button>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="py-2 px-4">Username</th>
+                                    <th class="py-2 px-4">Nama</th>
+                                    <th class="py-2 px-4">Waktu</th>
+                                    <th class="py-2 px-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="mahasiswa-content" class="tab-content mt-6 hidden">
+                    <h2 class="text-xl font-semibold mb-4">Tambah Akun Mahasiswa</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input id="new-student-name" type="text" placeholder="Nama Lengkap" class="p-2 border rounded">
+                        <input id="new-student-username" type="text" placeholder="Username (NIM)" class="p-2 border rounded">
+                        <input id="new-student-password" type="password" placeholder="Password" class="p-2 border rounded">
+                        <button id="add-student-btn" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Tambah Mahasiswa</button>
+                    </div>
+                </div>
+
+                <div id="jadwal-content" class="tab-content mt-6 hidden">
+                    <h2 class="text-xl font-semibold mb-4">Atur Jadwal</h2>
+                    <!-- Form untuk mengatur jadwal -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Mahasiswa -->
+        <div id="student-dashboard" class="hidden">
+             <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
+                <div>
+                    <h1 class="text-2xl font-bold">Dashboard Mahasiswa</h1>
+                    <p id="student-welcome"></p>
+                </div>
+                <button id="logout-btn-student" class="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">Logout</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Jadwal Anda Hari Ini</h2>
+                <div id="student-schedule" class="mb-6 p-4 bg-gray-50 rounded-md">Memuat jadwal...</div>
+                
+                <button id="attend-btn" class="w-full bg-green-500 text-white p-3 rounded-md text-lg font-bold hover:bg-green-600 disabled:bg-gray-400" disabled>Lakukan Absensi</button>
+                <p id="attendance-status" class="text-center mt-4 font-medium"></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
