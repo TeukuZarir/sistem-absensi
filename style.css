@@ -1,0 +1,11 @@
+/* Anda bisa menambahkan style kustom di sini jika diperlukan */
+body {
+    transition: background-color 0.3s;
+}
+.tab-content {
+    animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
